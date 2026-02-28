@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>자기야... 🥺</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
+
+  :root {
+    --pink: #ffb3c6;
+    --pink-deep: #ff85a1;
+    --peach: #ffd6c0;
+    --cream: #fff9f0;
+    --brown: #7a4f3a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    background: var(--cream);
+    font-family: 'Nanum Gothic', '나눔고딕', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .bg-deco { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  .star {
+    position: absolute;
+    animation: floatUp linear infinite;
+    opacity: 0.3;
+  }
+  @keyframes floatUp {
+    0%   { transform: translateY(110vh); opacity: 0; }
+    10%  { opacity: 0.3; }
+    90%  { opacity: 0.3; }
+    100% { transform: translateY(-10vh); opacity: 0; }
+  }
+
+  .page {
+    position: relative; z-index: 1;
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 2rem 1.2rem;
+    text-align: center;
+  }
+  .hidden { display: none !important; }
+
+  /* PAGE 1 */
+  .card {
+    background: white;
+    border-radius: 24px;
+    padding: 2.5rem 1.8rem;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 8px 40px rgba(255,133,161,0.2), 0 2px 0 var(--pink);
+    border: 2.5px solid var(--pink);
+    position: relative;
+    animation: popIn 0.6s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+  @keyframes popIn {
+    from { transform: scale(0.75) rotate(-2deg); opacity: 0; }
+    to   { transform: scale(1) rotate(0deg); opacity: 1; }
+  }
+  .stamp {
+    position: absolute; top: -16px; right: -10px;
+    font-size: 2.4rem;
+    transform: rotate(18deg);
+    animation: bounce 1.4s ease-in-out infinite;
+  }
+  @keyframes bounce {
+    0%,100% { transform: rotate(18deg) translateY(0); }
+    50%      { transform: rotate(18deg) translateY(-6px); }
+  }
+  .bear {
+    font-size: 4.5rem;
+    display: block;
+    animation: wobble 2.5s ease-in-out infinite;
+    margin-bottom: 0.6rem;
+  }
+  @keyframes wobble {
+    0%,100% { transform: rotate(-6deg); }
+    50%      { transform: rotate(6deg); }
+  }
+  h1 {
+    font-size: 1.7rem;
+    font-weight: 800;
+    color: var(--brown);
+    margin-bottom: 1.2rem;
+    line-height: 1.4;
+  }
+  .msg {
+    font-size: 1.05rem;
+    color: #8a5c50;
+    line-height: 2;
+    margin-bottom: 1.8rem;
+    word-break: keep-all;
+  }
+  .msg em {
+    color: var(--pink-deep);
+    font-style: normal;
+    font-weight: 700;
+  }
+
+  .btn {
+    display: block;
+    background: linear-gradient(135deg, #ff85a1, #ff6b9d);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 1rem 2.2rem;
+    font-family: 'Nanum Gothic', '나눔고딕', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 18px rgba(255,107,157,0.4);
+    touch-action: manipulation;
+    -webkit-appearance: none;
+    appearance: none;
+    user-select: none;
+    width: 100%;
+    max-width: 280px;
+    margin: 0 auto;
+  }
+  .btn:active { opacity: 0.85; transform: scale(0.97); }
+
+  /* PAGE 2 */
+  .game-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--brown);
+    margin-bottom: 0.3rem;
+  }
+  .game-sub {
+    font-size: 0.95rem;
+    color: #b07070;
+    margin-bottom: 1.2rem;
+    word-break: keep-all;
+  }
+  #timer-wrap {
+    width: 260px;
+    height: 12px;
+    background: #ffd6d6;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 0.7rem;
+  }
+  #timer-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #ff85a1, #ff6b9d);
+    border-radius: 20px;
+    transition: width 0.9s linear;
+    width: 100%;
+  }
+  #game-msg {
+    font-size: 1rem;
+    color: #b07070;
+    font-weight: 700;
+    min-height: 1.4rem;
+    margin-bottom: 1rem;
+  }
+  #game-board {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    width: 100%;
+    max-width: 320px;
+    margin-bottom: 1.2rem;
+  }
+  .card-g {
+    aspect-ratio: 1;
+    border-radius: 12px;
+    border: 2px solid var(--pink);
+    background: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    box-shadow: 0 2px 8px rgba(255,133,161,0.12);
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+  .card-g .front { display: none; }
+  .card-g .back  { display: flex; align-items: center; justify-content: center; }
+  .card-g.flipped { background: var(--peach); }
+  .card-g.flipped .front { display: flex; align-items: center; justify-content: center; }
+  .card-g.flipped .back  { display: none; }
+  .card-g.matched {
+    background: #d4f7d4 !important;
+    border-color: #7ecfa0 !important;
+    cursor: default;
+    pointer-events: none;
+  }
+  .card-g.matched .front { animation: matchPop 0.3s ease both; }
+  @keyframes matchPop {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.3); }
+    100% { transform: scale(1); }
+  }
+
+  .reset-btn {
+    background: white;
+    color: var(--pink-deep);
+    border: 2px solid var(--pink);
+    border-radius: 50px;
+    padding: 0.65rem 1.8rem;
+    font-family: 'Nanum Gothic', '나눔고딕', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-appearance: none;
+  }
+
+  /* PAGE 3 */
+  .big-emoji {
+    font-size: 5rem;
+    animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+    margin-bottom: 0.8rem;
+  }
+  #page-success h2 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--brown);
+    margin-bottom: 1rem;
+  }
+  .final-msg {
+    font-size: 1.05rem;
+    color: #8a5c50;
+    line-height: 2.1;
+    max-width: 360px;
+    margin: 0 auto 2rem;
+    word-break: keep-all;
+  }
+  .final-msg em {
+    color: var(--pink-deep);
+    font-style: normal;
+    font-weight: 700;
+  }
+
+  .confetti-wrap { position: fixed; inset: 0; pointer-events: none; z-index: 999; }
+  .confetti-piece {
+    position: absolute;
+    top: -30px;
+    animation: confettiFall linear forwards;
+  }
+  @keyframes confettiFall {
+    to { transform: translateY(115vh) rotate(540deg); opacity: 0; }
+  }
+
+  .float-heart {
+    position: fixed;
+    pointer-events: none;
+    font-size: 1.5rem;
+    animation: heartFly 1s ease-out forwards;
+    z-index: 9999;
+  }
+  @keyframes heartFly {
+    0%   { opacity: 1; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(-70px) scale(0.4); }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-deco" id="bg-deco"></div>
+
+<!-- PAGE 1 -->
+<div class="page" id="page-sorry">
+  <div class="card">
+    <span class="stamp">💌</span>
+    <span class="bear">🐻</span>
+    <h1>자기야… 미안해 🥺</h1>
+    <p class="msg">
+      또 그랬지…? 말도 없이 그냥 잠들어버려서<br>
+      얼마나 황당했어ㅠㅠ 진짜 미안해<br><br>
+      몇 번이나 얘기했는데도 <em>또 같은 실수</em> 한 거<br>
+      변명의 여지가 없어 🙈<br><br>
+      앞으로는 <em>자기 전에 꼭 알려줄게!</em><br>
+      자야 할 것 같으면 "나 졸려~" 라도 할게<br>
+      진짜 약속!! 🤙<br><br>
+      <em>많이 서운했지?</em> 나 반성 많이 했어… 😔
+    </p>
+    <button class="btn" id="btn-go">💖 미안함 확인하러 가기</button>
+  </div>
+</div>
+
+<!-- PAGE 2 -->
+<div class="page hidden" id="page-game">
+  <div class="game-title">🎮 카드 짝 맞추기</div>
+  <div class="game-sub">짝을 다 맞추면 특별한 메시지가 기다려요 👀</div>
+  <div id="timer-wrap"><div id="timer-bar"></div></div>
+  <div id="game-msg">카드를 뒤집어봐요!</div>
+  <div id="game-board"></div>
+  <button class="reset-btn" id="btn-reset">다시 하기 🔄</button>
+</div>
+
+<!-- PAGE 3 -->
+<div class="page hidden" id="page-success">
+  <div class="confetti-wrap" id="confetti"></div>
+  <div class="big-emoji">🎉</div>
+  <h2>게임 클리어~!! 🥳</h2>
+  <p class="final-msg">
+    그래서 말인데… 자기 오늘 <em>4시에 끝나잖아</em> 🕓<br>
+    사실 나 <em>마중 나가려고 해</em> 🫣<br><br>
+    오지 말랬다는 거 알아!! 근데<br>
+    그냥… 얼굴 한 번만 보고 싶어서 👉👈<br>
+    <em>한 시간만</em> 같이 있다 올게 🙏<br><br>
+    화 풀릴 때까지 귀엽게 굴 자신 있음 😤<br>
+    <em>나 가면 돼…?</em> 🐾
+  </p>
+  <button class="btn" id="btn-confetti">💕 좋아 와도 돼</button>
+</div>
+
+<script>
+// 배경 별
+(function() {
+  var emojis = ['🌸','💕','⭐','🌙','✨','🍒','🎀','💫'];
+  var bg = document.getElementById('bg-deco');
+  for (var i = 0; i < 16; i++) {
+    var s = document.createElement('div');
+    s.className = 'star';
+    s.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    s.style.left = (Math.random() * 100) + 'vw';
+    s.style.fontSize = (1 + Math.random() * 1.2) + 'rem';
+    s.style.animationDuration = (10 + Math.random() * 15) + 's';
+    s.style.animationDelay = (-Math.random() * 20) + 's';
+    bg.appendChild(s);
+  }
+})();
+
+// 터치/클릭 하트
+function spawnHeart(x, y) {
+  var h = document.createElement('div');
+  h.className = 'float-heart';
+  h.textContent = ['💕','💖','🌸','✨','💗'][Math.floor(Math.random() * 5)];
+  h.style.left = (x - 12) + 'px';
+  h.style.top  = (y - 12) + 'px';
+  document.body.appendChild(h);
+  setTimeout(function() { if (h.parentNode) h.parentNode.removeChild(h); }, 1100);
+}
+document.addEventListener('click', function(e) { spawnHeart(e.clientX, e.clientY); });
+document.addEventListener('touchend', function(e) {
+  if (e.changedTouches && e.changedTouches.length > 0) {
+    spawnHeart(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+  }
+}, { passive: true });
+
+// 페이지 전환
+function showPage(id) {
+  var pages = document.querySelectorAll('.page');
+  for (var i = 0; i < pages.length; i++) pages[i].classList.add('hidden');
+  document.getElementById(id).classList.remove('hidden');
+  window.scrollTo(0, 0);
+}
+
+// 버튼 바인딩
+document.getElementById('btn-go').addEventListener('click', function() {
+  showPage('page-game');
+  resetGame();
+});
+document.getElementById('btn-reset').addEventListener('click', resetGame);
+document.getElementById('btn-confetti').addEventListener('click', launchConfetti);
+
+// 게임
+var PAIRS = ['🍓','🍑','🍪','🧁','🍬','🌹'];
+var flipped = [], matchCount = 0, locked = false, timerInterval = null, timeLeft = 60;
+
+function resetGame() {
+  clearInterval(timerInterval);
+  flipped = []; matchCount = 0; locked = false; timeLeft = 60;
+  var bar = document.getElementById('timer-bar');
+  bar.style.transition = 'none';
+  bar.style.width = '100%';
+  setTimeout(function() { bar.style.transition = 'width 0.9s linear'; }, 50);
+  document.getElementById('game-msg').textContent = '카드를 뒤집어봐요!';
+
+  var pool = PAIRS.concat(PAIRS).sort(function() { return Math.random() - 0.5; });
+  var board = document.getElementById('game-board');
+  board.innerHTML = '';
+
+  pool.forEach(function(emoji) {
+    var card = document.createElement('div');
+    card.className = 'card-g';
+    card.dataset.emoji = emoji;
+    card.innerHTML = '<span class="back">💝</span><span class="front">' + emoji + '</span>';
+
+    function onFlip(e) {
+      if (e.type === 'touchend') e.preventDefault();
+      flipCard(card);
+    }
+    card.addEventListener('click', onFlip);
+    card.addEventListener('touchend', onFlip, { passive: false });
+    board.appendChild(card);
+  });
+
+  startTimer();
+}
+
+function startTimer() {
+  clearInterval(timerInterval);
+  timerInterval = setInterval(function() {
+    timeLeft--;
+    document.getElementById('timer-bar').style.width = (timeLeft / 60 * 100) + '%';
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      document.getElementById('game-msg').textContent = '시간 초과! 다시 해봐요 🥺';
+      var cards = document.querySelectorAll('.card-g:not(.matched)');
+      for (var i = 0; i < cards.length; i++) cards[i].style.pointerEvents = 'none';
+    }
+  }, 1000);
+}
+
+function flipCard(card) {
+  if (locked || flipped.length >= 2) return;
+  if (card.classList.contains('flipped') || card.classList.contains('matched')) return;
+  card.classList.add('flipped');
+  flipped.push(card);
+  if (flipped.length === 2) {
+    locked = true;
+    setTimeout(checkMatch, 750);
+  }
+}
+
+function checkMatch() {
+  var a = flipped[0], b = flipped[1];
+  if (a.dataset.emoji === b.dataset.emoji) {
+    a.classList.add('matched');
+    b.classList.add('matched');
+    matchCount++;
+    if (matchCount === 6) {
+      clearInterval(timerInterval);
+      document.getElementById('game-msg').textContent = '🎉 모두 맞췄어요!!';
+      setTimeout(function() { showPage('page-success'); launchConfetti(); }, 700);
+    } else {
+      document.getElementById('game-msg').textContent = matchCount + '/6 쌍 맞췄어요!';
+    }
+  } else {
+    a.classList.remove('flipped');
+    b.classList.remove('flipped');
+  }
+  flipped = [];
+  locked = false;
+}
+
+function launchConfetti() {
+  var wrap = document.getElementById('confetti');
+  wrap.innerHTML = '';
+  var pieces = ['🌸','💕','🎊','⭐','💖','🎀','✨','🍒'];
+  for (var i = 0; i < 36; i++) {
+    (function() {
+      var p = document.createElement('div');
+      p.className = 'confetti-piece';
+      p.textContent = pieces[Math.floor(Math.random() * pieces.length)];
+      p.style.left = (Math.random() * 100) + 'vw';
+      p.style.fontSize = (1.1 + Math.random() * 0.9) + 'rem';
+      var dur = 1.5 + Math.random() * 2;
+      var delay = Math.random() * 1.5;
+      p.style.animationDuration = dur + 's';
+      p.style.animationDelay = delay + 's';
+      wrap.appendChild(p);
+      setTimeout(function() { if (p.parentNode) p.parentNode.removeChild(p); }, (dur + delay + 0.5) * 1000);
+    })();
+  }
+}
+</script>
+</body>
+</html>
